@@ -1,0 +1,17 @@
+---- pack_hande_data_and_send Matches (16 in 4 files) ----
+FactoryPattern_Communication::unpack_ChangeTboxMode in FactoryPattern_Communication.cpp (src) : 	pack_hande_data_and_send( MSG_COMMAND_ModeID, mCurrentTboxPattern);
+FactoryPattern_Communication::unpack_Analysis_A5ToConfig in FactoryPattern_Communication.cpp (src) : 	//pack_hande_data_and_send(nCurMode, 0);
+FactoryPattern_Communication::unpack_Analysis_A5ToConfig in FactoryPattern_Communication.cpp (src) : 	pack_hande_data_and_send( MSG_COMMAND_Config, 0);
+FactoryPattern_Communication::unpack_Analysis_A5ToDetecting in FactoryPattern_Communication.cpp (src) : 	//pack_hande_data_and_send(nCurMode, 0);
+FactoryPattern_Communication::unpack_Analysis_A5ToDetecting in FactoryPattern_Communication.cpp (src) : 	pack_hande_data_and_send( MSG_COMMAND_Detecting, TAG_ID);
+FactoryPattern_Communication.cpp (src) line 383 : uint8_t FactoryPattern_Communication::pack_hande_data_and_send(uint16_t MsgID, uint8_t state)
+FactoryPattern_Communication in FactoryPattern_Communication.h (inc) : 	uint8_t pack_hande_data_and_send(uint16_t MsgID, uint8_t state);
+IVI_Communication::TBOX_Call_State_Report in IVI_Communication.cpp (src) :             pack_hande_data_and_send(2, state);
+IVI_Communication::TBOX_Network_State_Query in IVI_Communication.cpp (src) : 	pack_hande_data_and_send(2, 0);
+IVI_Communication::TBOX_Vehicle_VINCode_Query in IVI_Communication.cpp (src) : 	pack_hande_data_and_send(2, 0);
+IVI_Communication::TBOX_Telephone_Num_Query in IVI_Communication.cpp (src) : 	pack_hande_data_and_send(2, 0);
+IVI_Communication::TBOX_Ecall_State_Report in IVI_Communication.cpp (src) : 	pack_hande_data_and_send(2, 0);
+IVI_Communication::TBOX_General_Info_Query in IVI_Communication.cpp (src) : 	pack_hande_data_and_send(2, 0);
+IVI_Communication::TBOX_WIFI_Info_Query in IVI_Communication.cpp (src) : 		pack_hande_data_and_send(msgType, 0);
+IVI_Communication.cpp (src) line 812 : uint8_t IVI_Communication::pack_hande_data_and_send(uint16_t MsgID, uint8_t state)
+IVI_Communication in IVI_Communication.h (inc) : 	uint8_t pack_hande_data_and_send(uint16_t MsgID, uint8_t state);

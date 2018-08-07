@@ -1,0 +1,8 @@
+---- TBOX_REPORT_4G_STATE Matches (3 in 2 files) ----
+mcuUart::unpackMcuUartData in mcuUart.cpp (src) : 			//packDataWithRespone(TBOX_REPORT_4G_STATE, 0x01, NULL, 0, serialNumber);
+mcuUart::packDataWithRespone in mcuUart.cpp (src) : 		case TBOX_REPORT_4G_STATE:
+mcuUart.h (inc) line 57 : #define TBOX_REPORT_4G_STATE    0x85	  //主机状态汇报
+---- TBOX_REMOTECTRL_CMD Matches (3 in 2 files) ----
+mcuUart::unpackMcuUartData in mcuUart.cpp (src) : 		case TBOX_REMOTECTRL_CMD:	//0x04
+mcuUart::unpackMcuUartData in mcuUart.cpp (src) : 			packProtocolData(TBOX_REMOTECTRL_CMD, 0x04, NULL, 0, serialNumber);
+mcuUart.h (inc) line 59 : #define TBOX_REMOTECTRL_CMD		0x04	//从机控制应答
