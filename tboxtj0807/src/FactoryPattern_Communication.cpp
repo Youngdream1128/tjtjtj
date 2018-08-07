@@ -147,7 +147,6 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
             {	
 
 				#if 1
-
 				uint8_t *dataBuff = (uint8_t *)malloc(BUFFER_SIZE);
 				if(dataBuff == NULL)
 				{
