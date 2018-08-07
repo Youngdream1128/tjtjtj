@@ -174,7 +174,6 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
 				//end
 				*pos++=0x0A;
 				
-	
 				int length;
 				if((length = send(accept_fd, dataBuff, 8, 0)) < 0)
 				{
