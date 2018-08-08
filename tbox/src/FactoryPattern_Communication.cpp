@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 using namespace std;
 
 
@@ -133,6 +134,12 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
             socklen_t clientAddrLen = sizeof(clientAddr);
             int connfd = accept(socketfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
             add_socketFd(epoll_fd, connfd);
+			#if 0
+				ofstream testrcv;
+   				testrcv.open("/data/0808test.txt", ios::app); 
+				testrcv <<"connect ok"  << endl;
+				testrcv.close();
+			#endif
 
         }
         else if(events[i].events & EPOLLIN)
@@ -146,7 +153,12 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
             if(dataLen <= 0)
             {	
 
-				#if 1
+				#if 0
+				ofstream testrcv;
+   				testrcv.open("/data/0808test.txt", ios::app); 
+				testrcv <<"recv data less 0"  << endl;
+				testrcv.close();
+
 				uint8_t *dataBuff = (uint8_t *)malloc(BUFFER_SIZE);
 				if(dataBuff == NULL)
 				{
@@ -174,6 +186,7 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
 				//end
 				*pos++=0x0A;
 				
+	
 				int length;
 				if((length = send(accept_fd, dataBuff, 8, 0)) < 0)
 				{
@@ -182,6 +195,7 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
 				else
 				{
 					FACTORYPATTERN_LOG("Send data ok,length:%d\n", length);
+
 				}
 
 				if(dataBuff != NULL)
@@ -203,7 +217,28 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
 				//	FACTORYPATTERN_LOG("%02x ", *(buff + i));
 				//FACTORYPATTERN_LOG("\n\n");	
 
-				#if 1
+				#if 0
+
+				/*ofstream testrcv;
+   				testrcv.open("/data/0808test.txt", ios::app); 
+				testrcv <<"recv data ok"  << endl;
+	
+				for(i = 0; i < dataLen; ++i)
+				{
+					
+					testrcv << *(buff + i) << endl;
+					FACTORYPATTERN("%02x ", *(buff + i));
+					system("echo *(buff + i) > /data/log0808.txt");
+				}
+				testrcv.close();
+
+				int fd = open("/data/log0808.txt", O_RDWR|O_CREAT);
+
+  				write(fd, buff, strlen(buff));
+  				close(fd);
+				system("sync");*/
+
+
 
 				uint8_t *dataBuff = (uint8_t *)malloc(BUFFER_SIZE);
 				if(dataBuff == NULL)
@@ -236,10 +271,18 @@ void FactoryPattern_Communication::et_process(struct epoll_event *events, int nu
 				int length;
 				if((length = send(accept_fd, dataBuff, 8, 0)) < 0)
 				{
+					//ofstream testrcv;
+   					//testrcv.open("/data/0808test.txt", ios::app); 
+					//testrcv <<"send data fail"  << endl;
+					//testrcv.close();
 					close(accept_fd);
 				}
 				else
 				{
+					//ofstream testrcv;
+   					//testrcv.open("/data/0808test.txt", ios::app); 
+					//testrcv <<"send data ok length is" <<length << endl;
+					//testrcv.close();
 					FACTORYPATTERN_LOG("Send data ok,length:%d\n", length);
 				}
 
@@ -342,6 +385,7 @@ uint8_t FactoryPattern_Communication::unpack_Analysis_Config(uint8_t *pData, int
 	pos += 6;
 	tboxConfigST.SupplierSN_Len= *pos++;	//SN长度
 	memcpy(tboxConfigST.SupplierSN, pos, 11);//供应商序列号SN
+
 	
 	//写入文件
 	int fd = open(Pattern_FILE, O_RDWR|O_CREAT);
@@ -359,6 +403,79 @@ uint8_t FactoryPattern_Communication::unpack_Analysis_Config(uint8_t *pData, int
     }
     close(fd);
 	system("sync");
+
+
+	#if 0
+	TBox_Config_ST ConfigShow;
+	int fd2;
+	int retval;
+	
+	fd2 = open(Pattern_FILE, O_RDONLY, 0666);
+	if(fd2 < 0)
+	{
+		return -1;
+	}
+	else
+	{
+		retval = read(fd2, &ConfigShow, sizeof(TBox_Config_ST));
+		close(fd2);
+	}
+
+	uint8_t *dataBuff = (uint8_t *)malloc(BUFFER_SIZE);
+	if(dataBuff == NULL)
+				{
+					FACTORYPATTERN_LOG("malloc dataBuff error!");
+					return 1;
+				}
+				memset(dataBuff, 0, BUFFER_SIZE);
+				uint8_t *aos = dataBuff;
+
+				*aos++=ConfigShow.PowerDomain_Len;
+				*aos++=ConfigShow.PowerDomain;
+				*aos++=ConfigShow.TBoxVIN_Len;
+				memcpy(aos,ConfigShow.Tbox_VIN, 17);	
+				aos += 17;
+				*aos++=ConfigShow.SK_Len;
+				memcpy(aos,ConfigShow.SK, 6);	
+				aos += 6;
+				
+				*aos++=ConfigShow.SupplierSN_Len;
+				memcpy(aos,ConfigShow.SupplierSN, 11);	
+				aos += 11;
+			
+	
+				int length;
+				if((length = send(accept_fd, dataBuff, 39, 0)) < 0)
+				{
+					ofstream testrcv;
+   					testrcv.open("/data/0808test.txt", ios::app); 
+					testrcv <<"send data fail"  << endl;
+					testrcv.close();
+					close(accept_fd);
+				}
+				else
+				{
+					ofstream testrcv;
+   					testrcv.open("/data/0808test.txt", ios::app); 
+					testrcv <<"send data ok length is" <<length << endl;
+					testrcv.close();
+					FACTORYPATTERN_LOG("Send data ok,length:%d\n", length);
+				}
+
+				if(dataBuff != NULL)
+				{
+					free(dataBuff);
+					dataBuff = NULL;
+				}
+
+
+
+
+
+	#endif
+
+
+	
 
 
 	//返回数据
@@ -740,7 +857,7 @@ uint16_t FactoryPattern_Communication::pack_GPSSIGN_data(uint8_t *pData, int len
 	*pos++=0;
 	*pos++=1;
 	//判断是否成功
-	*pos++=0;
+	*pos++=1;
 	return (uint16_t)(pos-pData);
 }
 uint16_t FactoryPattern_Communication::pack_MAINPOWER_data(uint8_t *pData, int len)
@@ -804,4 +921,12 @@ uint16_t FactoryPattern_Communication::pack_TBOXINFO_data(uint8_t *pData, int le
 	pos+=11;
 
 	return (uint16_t)(pos-pData);*/
+
+	uint8_t *pos = pData;
+	*pos++=TAGID_ACCOFF_Rep;
+	*pos++=0;
+	*pos++=1;
+	//判断是否成功
+	*pos++=1;
+	return (uint16_t)(pos-pData);
 }
